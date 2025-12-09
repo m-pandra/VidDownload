@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gabut Downloader</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="container">
+    <h2>Tes Download</h2>
+    <p style="margin-bottom:15px;font-size:14px;">
+        Support Semua sosmed
+    </p>
+
+
+    <form method="POST" onsubmit="return validateForm()">   
+        <input type="text" name="url" id="videoUrl" placeholder="Taruh link disini cuy">
+        <p id="errorMsg" style="color:red; font-size:13px; margin-top:5px; display:none;">
+            Linknya mana njay..???
+        </p>
+
+
+        <select name="quality">
+            <option value="best">HD (Uwapik)</option>
+            <option value="worst">SD (Burik lek asli)</option>
+        </select>
+
+        <button type="submit" id="downloadBtn" class="mobile-main-btn">
+            Download Video
+        </button>
+
+    </form>
+
+
+    <!-- LOADING PROGRESS BAR -->
+    <div class="loading-box" id="loading">
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <p style="margin-top:8px;">UTIWI...</p>
+    </div>
+
+
+    {% if thumbnail %}
+    <div class="thumbnail-box mobile-preview">
+        <img src="{{ thumbnail }}" class="thumb-img">
+
+        <div class="thumbnail-overlay">
+            <p>{{ title }}</p>
+
+            {% if filename %}
+            <a href="/downloads/{{ filename }}" download>
+                <button class="mobile-download-btn">Download</button>
+            </a>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+
+
+</div>
+
+<script>
+function showLoading() {
+    document.getElementById("loading").style.display = "block";
+}
+</script>
+<script>
+function startProgress() {
+    const loading = document.getElementById("loading");
+    const bar = document.getElementById("progressBar");
+
+    loading.style.display = "block";
+    bar.style.width = "0%";
+
+    let progress = 0;
+    const interval = setInterval(() => {
+        progress += 5;
+        bar.style.width = progress + "%";
+
+        if (progress >= 100) {
+            clearInterval(interval);
+        }
+    }, 200);
+}
+</script>
+<script>
+function validateForm() {
+    const urlInput = document.getElementById("videoUrl");
+    const errorMsg = document.getElementById("errorMsg");
+
+    if (urlInput.value.trim() === "") {
+        errorMsg.style.display = "block";
+        return false; // STOP submit
+    } else {
+        errorMsg.style.display = "none";
+        startProgress(); // lanjutkan progress bar
+        return true; // lanjut submit
+    }
+}
+</script>
+<script>
+const qualitySelect = document.querySelector('select[name="quality"]');
+
+qualitySelect.addEventListener("change", function () {
+    this.classList.remove("select-animate");
+    void this.offsetWidth; 
+    this.classList.add("select-animate");
+});
+</script>
+
+</body>
+</html>
