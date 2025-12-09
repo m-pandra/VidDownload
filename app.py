@@ -20,33 +20,69 @@ def index():
         quality = request.form["quality"]
 
         try:
-            # ✅ AMBIL INFO VIDEO TANPA DOWNLOAD
-            with yt_dlp.YoutubeDL({'quiet': True}) as ydl:
+            # ===========================
+            # ✅ AMBIL INFO TANPA DOWNLOAD
+            # ===========================
+            ydl_info_opts = {
+                "quiet": True,
+                "nocheckcertificate": True,
+                "cookiefile": None,
+                "force_ipv4": True,
+                "http_headers": {
+                    "User-Agent": "Mozilla/5.0"
+                }
+            }
+
+            with yt_dlp.YoutubeDL(ydl_info_opts) as ydl:
                 info = ydl.extract_info(url, download=False)
 
-            title = info.get("title")
-            thumbnail = info.get("thumbnail")
+            title = info.get("title", "Downloader")
 
-            # ✅ FORMAT TANGGAL HARI INI
+            # ===========================
+            # ✅ FIX THUMBNAIL INSTAGRAM / TIKTOK / FB
+            # ===========================
+            if info.get("thumbnail"):
+                thumbnail = info["thumbnail"]
+            elif info.get("thumbnails"):
+                thumbnail = info["thumbnails"][-1]["url"]
+            else:
+                thumbnail = None
+
+            # ===========================
+            # ✅ FORMAT NAMA FILE TANGGAL
+            # ===========================
             today = datetime.now().strftime("%Y%m%d")
 
-            # ✅ HITUNG FILE YANG SUDAH ADA DI TANGGAL INI
             existing_files = os.listdir(DOWNLOAD_FOLDER)
             today_files = [f for f in existing_files if f.startswith(f"download-{today}")]
             video_number = len(today_files) + 1
 
-            # ✅ NAMA FILE FINAL
             final_name = f"download-{today}-{video_number}.{info['ext']}"
 
+            # ===========================
             # ✅ SETTING DOWNLOAD
+            # ===========================
             ydl_opts = {
-                'format': quality,
-                'outtmpl': os.path.join(
+                "format": quality,
+                "outtmpl": os.path.join(
                     DOWNLOAD_FOLDER,
                     f"download-{today}-{video_number}.%(ext)s"
                 ),
-                'noplaylist': True,
-                'quiet': True
+                "noplaylist": True,
+                "quiet": True,
+                "nocheckcertificate": True,
+                "merge_output_format": "mp4",
+
+                "http_headers": {
+                    "User-Agent": "Mozilla/5.0"
+                },
+
+                # ✅ FIX TIKTOK & IG WATERMARK
+                "extractor_args": {
+                    "tiktok": {
+                        "impersonation": ["web"]
+                    }
+                }
             }
 
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
@@ -69,12 +105,6 @@ def index():
 @app.route("/downloads/<path:filename>")
 def download_file(filename):
     return send_from_directory(DOWNLOAD_FOLDER, filename, as_attachment=True)
-
-# if __name__ == "__main__":
-#     if not os.path.exists(DOWNLOAD_FOLDER):
-#         os.makedirs(DOWNLOAD_FOLDER)
-
-#     app.run(debug=True)
 
 if __name__ == "__main__":
     if not os.path.exists(DOWNLOAD_FOLDER):
