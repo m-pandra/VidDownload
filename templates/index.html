@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
     <title>Gabut Downloader</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,43 +7,64 @@
 </head>
 <body>
 
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar">
+    <div class="nav-brand">Gabut Downloader</div>
+    <div class="nav-toggle" onclick="toggleMenu()">☰</div>
+
+    <ul class="nav-menu" id="navMenu">
+        <li><a href="/">Home</a></li>
+        <li><a href="#">Downloader</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Contact</a></li>
+    </ul>
+</nav>
+
+<!-- ===== MAIN CONTAINER ===== -->
 <div class="container">
+
     <h2>Gabut Downloader</h2>
     <p style="margin-bottom:15px;font-size:14px;">
-        Support Semua sosmed
+        Support FB IG TT
     </p>
 
+    <form method="POST" id="downloadForm">
 
-    <form method="POST" onsubmit="return validateForm()">   
         <input type="text" name="url" id="videoUrl" placeholder="Taruh link disini cuy">
+
         <p id="errorMsg" style="color:red; font-size:13px; margin-top:5px; display:none;">
             Linknya mana njay..???
         </p>
 
-
         <select name="quality">
-            <option value="best">HD (Uwapik)</option>
+            <option value="best">HD (Apik lah pokok e)</option>
             <option value="worst">SD (Burik lek asli)</option>
         </select>
 
         <button type="submit" id="downloadBtn" class="mobile-main-btn">
-            Download Video
+            Proses Video
         </button>
 
     </form>
 
-
-    <!-- LOADING PROGRESS BAR -->
+    <!-- ✅ LOADING DENGAN GAMBAR -->
     <div class="loading-box" id="loading">
+
+        <!-- ✅ GAMBAR LOADING -->
+        <img src="{{ url_for('static', filename='loading.gif') }}" 
+             class="loading-image"
+             alt="Loading...">
+
         <div class="progress-container">
             <div class="progress-bar" id="progressBar"></div>
         </div>
-        <p style="margin-top:8px;">UTIWI...</p>
+
+        <p style="margin-top:10px;">Sabar Gaiss...</p>
     </div>
 
-
+    <!-- ✅ THUMBNAIL PREVIEW -->
     {% if thumbnail %}
-    <div class="thumbnail-box mobile-preview">
+    <div class="thumbnail-box mobile-preview thumbnail-animate">
         <img src="{{ thumbnail }}" class="thumb-img">
 
         <div class="thumbnail-overlay">
@@ -61,54 +82,87 @@
 
 </div>
 
+<!-- ✅ NAVBAR SCRIPT -->
 <script>
-function showLoading() {
-    document.getElementById("loading").style.display = "block";
+function toggleMenu() {
+    document.getElementById("navMenu").classList.toggle("show");
 }
 </script>
-<script>
-function startProgress() {
-    const loading = document.getElementById("loading");
-    const bar = document.getElementById("progressBar");
 
-    loading.style.display = "block";
-    bar.style.width = "0%";
-
-    let progress = 0;
-    const interval = setInterval(() => {
-        progress += 5;
-        bar.style.width = progress + "%";
-
-        if (progress >= 100) {
-            clearInterval(interval);
-        }
-    }, 200);
-}
-</script>
-<script>
-function validateForm() {
-    const urlInput = document.getElementById("videoUrl");
-    const errorMsg = document.getElementById("errorMsg");
-
-    if (urlInput.value.trim() === "") {
-        errorMsg.style.display = "block";
-        return false; // STOP submit
-    } else {
-        errorMsg.style.display = "none";
-        startProgress(); // lanjutkan progress bar
-        return true; // lanjut submit
-    }
-}
-</script>
+<!-- ✅ DROPDOWN ANIMASI -->
 <script>
 const qualitySelect = document.querySelector('select[name="quality"]');
-
 qualitySelect.addEventListener("change", function () {
     this.classList.remove("select-animate");
-    void this.offsetWidth; 
+    void this.offsetWidth;
     this.classList.add("select-animate");
 });
 </script>
+
+<!-- ✅ FINAL PROGRESS + SUBMIT FIX -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const form = document.getElementById("downloadForm");
+    const loading = document.getElementById("loading");
+    const bar = document.getElementById("progressBar");
+    const urlInput = document.getElementById("videoUrl");
+    const errorMsg = document.getElementById("errorMsg");
+    const btn = document.getElementById("downloadBtn");
+    const thumbnail = document.getElementById("thumbnailBox");
+
+    function startProgress() {
+        loading.style.display = "block";
+        loading.classList.remove("loading-hide");
+        bar.style.width = "0%";
+
+        let progress = 0;
+        const interval = setInterval(() => {
+            progress += 3;
+            bar.style.width = progress + "%";
+
+            if (progress >= 98) {
+                progress = 98; // ✅ stop di 98% (nunggu server)
+            }
+        }, 120);
+    }
+
+    form.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        if (urlInput.value.trim() === "") {
+            errorMsg.style.display = "block";
+            urlInput.classList.add("input-error");
+            return;
+        }
+
+        errorMsg.style.display = "none";
+        urlInput.classList.remove("input-error");
+
+        btn.disabled = true;
+        startProgress();
+
+        // ✅ SUBMIT KE FLASK (TANPA DELAY ANEH)
+        setTimeout(() => {
+            form.submit();
+        }, 600);
+    });
+
+    // ✅ INI KUNCI UTAMANYA:
+    // JIKA THUMBNAIL SUDAH MUNCUL → LOADING HILANG DENGAN ANIMASI
+    if (thumbnail) {
+        loading.classList.add("loading-hide");
+
+        // paksa progress jadi 100%
+        setTimeout(() => {
+            bar.style.width = "100%";
+        }, 200);
+    }
+
+});
+</script>
+
+
 
 </body>
 </html>

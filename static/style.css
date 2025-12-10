@@ -4,39 +4,98 @@
     font-family: Arial, sans-serif;
 }
 
-/* === BODY === */
+/* === BODY DESKTOP === */
 body {
-    background: linear-gradient(120deg, #1877f2, #42b72a);
+    background: #1877f2; /* FULL BIRU */
     min-height: 100vh;
     margin: 0;
-    padding: 20px;
+    padding-top: 70px; /* ruang navbar */
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
+    width: 100%;
+    overflow-x: hidden;
 }
 
-/* === CONTAINER === */
+/* ===== NAVBAR ===== */
+.navbar {
+    width: 100%;
+    background: black;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 18px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 999;
+}
+
+.nav-brand {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.nav-toggle {
+    font-size: 22px;
+    cursor: pointer;
+    display: none;
+}
+
+.nav-menu {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.nav-menu li a {
+    text-decoration: none;
+    color: white;
+    font-size: 14px;
+}
+
+/* MODE HP MENU */
+@media (max-width: 768px) {
+    .nav-toggle {
+        display: block;
+    }
+
+    .nav-menu {
+        position: absolute;
+        top: 55px;
+        right: 10px;
+        background: black;
+        flex-direction: column;
+        width: 180px;
+        display: none;
+        padding: 10px;
+        border-radius: 12px;
+    }
+
+    .nav-menu.show {
+        display: flex;
+    }
+}
+
+/* === CONTAINER (CARD) === */
 .container {
     background: white;
-    width: 350px;
-    padding: 20px;
-    border-radius: 16px;
+    width: 100%;
+    max-width: 420px;
+    margin-top: 20px;
+    padding: 22px;
+    border-radius: 18px;
     box-shadow: 0 8px 25px rgba(0,0,0,0.15);
     text-align: center;
 }
 
-/* === TITLE === */
-.container h2 {
-    margin-top: 0;
-    margin-bottom: 5px;
-}
-
-/* === FORM INPUT === */
+/* === FORM === */
 input, select {
     width: 100%;
-    padding: 11px;
+    padding: 12px;
     margin-top: 10px;
-    border-radius: 8px;
+    border-radius: 10px;
     border: 1px solid #ccc;
     outline: none;
     font-size: 14px;
@@ -49,51 +108,110 @@ input:focus, select:focus {
 /* === BUTTON === */
 button {
     width: 100%;
-    padding: 12px;
+    padding: 13px;
     margin-top: 15px;
     border: none;
-    border-radius: 10px;
-    background: linear-gradient(90deg, #1877f2, #42b72a);
+    border-radius: 12px;
+    background: #1877f2; /* FULL BIRU */
     color: white;
     font-weight: bold;
-    font-size: 15px;
     cursor: pointer;
-    transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s;
 }
 
-button:hover {
-    opacity: 0.9;
+/* === THUMBNAIL === */
+.thumbnail-box {
+    position: relative;
+    margin-top: 18px;
+    width: 100%;
+    height: 380px;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #000;
 }
 
-button:active {
-    transform: scale(0.96);
-    box-shadow: 0 0 0 rgba(0,0,0,0);
+.thumbnail-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
-/* === ERROR INPUT ANIMATION === */
-.input-error {
-    border: 2px solid red !important;
-    animation: shake 0.3s ease-in-out;
+.thumbnail-overlay {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background: rgba(0,0,0,0.6);
+    color: white;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
-@keyframes shake {
-    0% { transform: translateX(0); }
-    25% { transform: translateX(-5px); }
-    50% { transform: translateX(5px); }
-    75% { transform: translateX(-5px); }
-    100% { transform: translateX(0); }
+/* ===== MOBILE MODE (FULL PUTIH, TIDAK BOCOR) ===== */
+@media (max-width: 600px) {
+
+    html, body {
+        width: 100%;
+        height: 100%;
+        background: white !important;
+        overflow-x: hidden;
+    }
+
+    body {
+        display: block;
+        padding-top: 65px;
+    }
+
+    .container {
+        background: white !important;
+        min-height: calc(100vh - 65px);
+        border-radius: 0;
+        box-shadow: none;
+        margin-top: 0;
+        padding-bottom: 50px;
+    }
+
+    .thumbnail-box {
+        height: 420px;
+        border-radius: 18px;
+    }
+
+    .mobile-main-btn {
+        font-size: 17px;
+        padding: 15px;
+        border-radius: 14px;
+        margin-top: 18px;
+    }
+
+    input, select {
+        font-size: 16px;
+        padding: 14px;
+    }
 }
 
-#errorMsg {
-    animation: fadeIn 0.4s ease;
+/* ===== DROPDOWN ANIMATION ===== */
+select {
+    padding: 14px 46px 14px 14px;
+    border-radius: 14px;
+    border: 1.8px solid #d0d9ff;
+    background-color: #f9fbff;
+    font-size: 15px;
+    font-weight: 600;
+    appearance: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-5px); }
-    to { opacity: 1; transform: translateY(0); }
+.select-animate {
+    animation: selectGlow 0.4s ease;
 }
 
-/* === LOADING PROGRESS BAR === */
+@keyframes selectGlow {
+    0% { box-shadow: 0 0 0 transparent; }
+    50% { box-shadow: 0 0 18px rgba(24,119,242,.5); }
+    100% { box-shadow: 0 0 8px rgba(66,183,42,.5); }
+}
+/* === LOADING PROGRESS FIX === */
 .loading-box {
     display: none;
     margin-top: 18px;
@@ -111,258 +229,56 @@ button:active {
 .progress-bar {
     width: 0%;
     height: 100%;
-    background: linear-gradient(90deg, #1877f2, #42b72a);
-    transition: width 0.4s ease;
+    background: #1877f2; /* FULL BIRU */
+    transition: width 0.12s linear;
 }
-
-/* === THUMBNAIL BOX === */
-.thumbnail-box {
-    position: relative;
-    margin-top: 18px;
-    width: 100%;
-    height: 350px;              /* ✅ TINGGI FIX */
-    border-radius: 12px;
-    overflow: hidden;
-    background: #000;
-    animation: fadeSlide 0.6s ease forwards;
-}
-
-.thumb-img,
-.thumbnail-box img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;         /* ✅ AUTO CROP SEPERTI TIKTOK */
+/* === LOADING IMAGE === */
+.loading-image {
+    width: 90px;
+    margin: 12px auto 14px auto;
     display: block;
+    animation: loadingPulse 1.2s infinite ease-in-out;
 }
 
-/* === THUMBNAIL ANIMATION === */
-@keyframes fadeSlide {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+@keyframes loadingPulse {
+    0%   { transform: scale(1); opacity: 0.6; }
+    50%  { transform: scale(1.08); opacity: 1; }
+    100% { transform: scale(1); opacity: 0.6; }
+}
+/* ===== ANIMASI LOADING HILANG ===== */
+.loading-hide {
+    animation: loadingOut 0.6s ease forwards;
 }
 
-/* === THUMBNAIL OVERLAY === */
-.thumbnail-overlay {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    background: rgba(0,0,0,0.6);
-    color: white;
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    align-items: center;
-}
-
-.thumbnail-overlay p {
-    margin: 0;
-    font-size: 13px;
-}
-
-.thumbnail-overlay button {
-    font-size: 13px;
-    padding: 8px;
-    border-radius: 8px;
-}
-
-/* === MOBILE FULL SCREEN MODE === */
-@media (max-width: 600px) {
-    body {
-        padding: 0;
-    }
-
-    .container {
-        width: 100%;
-        height: 100vh;
-        border-radius: 0;
-        box-shadow: none;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    }
-
-    input, select, button {
-        font-size: 16px;
-        padding: 13px;
-    }
-
-    .thumb-img {
-        width: 100%;
-        height: auto;
-    }
-}
-/* =========================
-   ✅ MOBILE MODE MAXIMAL
-========================= */
-
-@media (max-width: 600px) {
-
-    body {
-        padding: 0;
-    }
-
-    .container {
-        width: 100%;
-        height: 100vh;
-        border-radius: 0;
-        box-shadow: none;
-        padding: 18px;
-        justify-content: flex-start;
-    }
-
-    h2 {
-        font-size: 20px;
-    }
-
-    input, select {
-        font-size: 16px;
-        padding: 14px;
-        border-radius: 12px;
-    }
-
-    /* ✅ TOMBOL UTAMA MOBILE */
-    .mobile-main-btn {
-        font-size: 17px;
-        padding: 15px;
-        border-radius: 14px;
-        margin-top: 18px;
-    }
-
-    /* ✅ PREVIEW KHUSUS MOBILE */
-    .mobile-preview {
-        margin-top: 22px;
-        border-radius: 16px;
-        overflow: hidden;
-        background: black;
-    }
-
-    .mobile-preview img {
-        width: 100%;
-        height: 320px;
-        object-fit: cover; /* ✅ TAMPAK SEPERTI TIKTOK */
-    }
-
-    /* ✅ OVERLAY MOBILE */
-    .thumbnail-overlay {
-        padding: 14px;
-    }
-
-    .thumbnail-overlay p {
-        font-size: 14px;
-        text-align: center;
-    }
-
-    /* ✅ TOMBOL DOWNLOAD DI PREVIEW */
-    .mobile-download-btn {
-        width: 100%;
-        font-size: 15px;
-        padding: 12px;
-        border-radius: 12px;
-    }
-
-    /* ✅ PROGRESS BAR MOBILE */
-    .progress-container {
-        height: 12px;
-        border-radius: 30px;
-    }
-
-    .loading-box p {
-        font-size: 13px;
-    }
-}
-@media (max-width: 600px) {
-    .thumbnail-box {
-        height: 420px;   /* ✅ TAMPILAN REELS / TIKTOK */
-        border-radius: 16px;
-    }
-}
-/* === ANIMATED DROPDOWN === */
-select {
-    width: 100%;
-    padding: 14px 46px 14px 14px;
-    border-radius: 14px;
-    border: 1.8px solid #d0d9ff;
-    background-color: #f9fbff;
-    font-size: 15px;
-    font-weight: 600;
-    color: #222;
-    cursor: pointer;
-    outline: none;
-    appearance: none;
-    
-    /* ✅ PANAH CUSTOM */
-    background-image:
-        linear-gradient(45deg, transparent 50%, white 50%),
-        linear-gradient(135deg, white 50%, transparent 50%),
-        linear-gradient(to right, #1877f2, #42b72a);
-    background-position:
-        calc(100% - 22px) calc(1.1em),
-        calc(100% - 16px) calc(1.1em),
-        100% 0;
-    background-size:
-        6px 6px,
-        6px 6px,
-        3.2em 100%;
-    background-repeat: no-repeat;
-
-    transition: 
-        all 0.3s cubic-bezier(.4,0,.2,1);
-}
-select:focus {
-    border-color: #1877f2;
-    background-color: #ffffff;
-    box-shadow: 0 0 0 4px rgba(24, 119, 242, 0.12);
-    transform: translateY(-1px);
-}
-select option {
-    font-size: 15px;
-    font-weight: 600;
-    padding: 14px;
-    background: white;
-    color: #222;
-}
-
-select option:checked {
-    background: linear-gradient(90deg, #1877f2, #42b72a);
-    color: white;
-}
-
-select option:hover {
-    background: linear-gradient(90deg, #1877f2, #42b72a);
-    color: white;
-    padding-left: 18px;
-}
-/* ✅ ANIMASI BARU DROPDOWN SAAT DIPILIH */
-.select-animate {
-    animation: selectGlowSlide 0.45s cubic-bezier(.4,0,.2,1);
-}
-
-@keyframes selectGlowSlide {
+@keyframes loadingOut {
     0% {
-        box-shadow: 0 0 0 rgba(24, 119, 242, 0);
-        transform: translateY(0);
-        background-color: white;
-    }
-    40% {
-        box-shadow: 0 0 18px rgba(24, 119, 242, 0.55);
-        transform: translateY(-2px);
-        background-color: #f0f7ff;
+        opacity: 1;
+        transform: scale(1);
     }
     100% {
-        box-shadow: 0 0 10px rgba(66, 183, 42, 0.45);
-        transform: translateY(0);
-        background-color: white;
+        opacity: 0;
+        transform: scale(0.85);
+        display: none;
     }
 }
-select:active {
-    transform: scale(0.985);
-    box-shadow: 0 6px 18px rgba(24, 119, 242, 0.25);
+
+/* ===== ANIMASI THUMBNAIL MUNCUL ===== */
+.thumbnail-animate {
+    animation: thumbIn 0.7s cubic-bezier(.4,0,.2,1);
+}
+
+@keyframes thumbIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.88) translateY(30px);
+    }
+    60% {
+        opacity: 1;
+        transform: scale(1.05) translateY(-6px);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
 }
 
