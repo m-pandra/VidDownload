@@ -9,7 +9,7 @@ body {
     background: #1877f2; /* FULL BIRU */
     min-height: 100vh;
     margin: 0;
-    padding-top: 70px; /* ruang navbar */
+    padding-top: 120px; /* ruang navbar */
     display: flex;
     justify-content: center;
     align-items: flex-start;
@@ -35,6 +35,11 @@ body {
 .nav-brand {
     font-size: 18px;
     font-weight: bold;
+}
+.nav-brand img{
+    height: 80px;
+    width: auto;
+    object-fit: contain;
 }
 
 .nav-toggle {
@@ -159,7 +164,7 @@ button {
 
     body {
         display: block;
-        padding-top: 65px;
+        padding-top: 125px;
     }
 
     .container {
