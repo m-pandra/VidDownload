@@ -15,10 +15,8 @@
     <div class="nav-toggle" onclick="toggleMenu()">☰</div>
 
     <ul class="nav-menu" id="navMenu">
-        <li><a href="/">Home</a></li>
-        <li><a href="#">Downloader</a></li>
-        <li><a href="#">About</a></li>
-        <li><a href="#">Contact</a></li>
+        <li><a href="/">Video</a></li>
+        <li><a href="/ig-story">IG Story</a></li>
     </ul>
 </nav>
 
@@ -111,7 +109,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const urlInput = document.getElementById("videoUrl");
     const errorMsg = document.getElementById("errorMsg");
     const btn = document.getElementById("downloadBtn");
-    const thumbnail = document.getElementById("thumbnailBox");
 
     function startProgress() {
         loading.style.display = "block";
@@ -122,9 +119,8 @@ document.addEventListener("DOMContentLoaded", function () {
         const interval = setInterval(() => {
             progress += 3;
             bar.style.width = progress + "%";
-
             if (progress >= 98) {
-                progress = 98; // ✅ stop di 98% (nunggu server)
+                progress = 98;
             }
         }, 120);
     }
@@ -132,37 +128,36 @@ document.addEventListener("DOMContentLoaded", function () {
     form.addEventListener("submit", function (e) {
         e.preventDefault();
 
+        // ✅ JIKA LINK KOSONG → JANGAN PROSES APA PUN
         if (urlInput.value.trim() === "") {
             errorMsg.style.display = "block";
             urlInput.classList.add("input-error");
+
+            // ✅ PASTIKAN TOMBOL TIDAK BERUBAH
+            btn.innerText = "Proses Video";
+            btn.classList.remove("loading-btn");
             return;
         }
 
+        // ✅ JIKA LINK ADA → BARU PROSES
         errorMsg.style.display = "none";
         urlInput.classList.remove("input-error");
 
         btn.disabled = true;
+        btn.classList.add("loading-btn");
+        btn.innerText = "Memproses...";
+
         startProgress();
 
-        // ✅ SUBMIT KE FLASK (TANPA DELAY ANEH)
         setTimeout(() => {
             form.submit();
         }, 600);
     });
 
-    // ✅ INI KUNCI UTAMANYA:
-    // JIKA THUMBNAIL SUDAH MUNCUL → LOADING HILANG DENGAN ANIMASI
-    if (thumbnail) {
-        loading.classList.add("loading-hide");
-
-        // paksa progress jadi 100%
-        setTimeout(() => {
-            bar.style.width = "100%";
-        }, 200);
-    }
-
 });
 </script>
+
+
 
 
 

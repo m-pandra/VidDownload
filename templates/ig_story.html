@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Gabut Downloader</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="nav-brand">
+        <img src="{{ url_for('static', filename='logo.gif') }}">
+    </div>
+    <div class="nav-toggle" onclick="toggleMenu()">☰</div>
+
+    <ul class="nav-menu" id="navMenu">
+        <li><a href="/">Home</a></li>
+        <li><a href="/ig-story">IG Story</a></li>
+    </ul>
+</nav>
+
+<div class="container">
+    <h2>Instagram Story Downloader</h2>
+
+    <form method="POST">
+        <input type="text" name="username" placeholder="Username tanpa @" value="{{ username }}">
+        <button type="submit">Preview Story</button>
+    </form>
+
+    {% if message %}
+        <p style="margin-top:10px;">{{ message }}</p>
+    {% endif %}
+
+    <!-- ✅ GRID PREVIEW STORY -->
+    {% if previews %}
+    <div class="story-grid">
+        {% for item in previews %}
+        <div class="story-card thumbnail-animate">
+            <img src="{{ item.thumbnail }}">
+            <p>{{ item.title }}</p>
+
+            <!-- ✅ DOWNLOAD PER ITEM (ANTI SALAH FILE) -->
+            <form method="POST" action="/download-story">
+                <input type="hidden" name="username" value="{{ username }}">
+                <input type="hidden" name="index" value="{{ item.index }}">
+                <button type="submit" class="mobile-download-btn">
+                    Download Story {{ item.index }}
+                </button>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+</div>
+
+<script>
+function toggleMenu() {
+    document.getElementById("navMenu").classList.toggle("show");
+}
+</script>
+
+</body>
+</html>
